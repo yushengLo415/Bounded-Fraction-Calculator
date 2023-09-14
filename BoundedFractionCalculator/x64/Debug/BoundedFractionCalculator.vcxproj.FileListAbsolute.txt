@@ -1,0 +1,3 @@
+C:\Users\s1031\Desktop\新增資料夾 (2)\BoundedFractionCalculator\x64\Debug\BoundedFractionCalculator.vcxproj.AssemblyReference.cache
+C:\Users\s1031\Desktop\新增資料夾 (2)\BoundedFractionCalculator\x64\Debug\CppCLRWinformsProjekt.MainForm.resources
+C:\Users\s1031\Desktop\新增資料夾 (2)\BoundedFractionCalculator\x64\Debug\BoundedFractionCalculator.vcxproj.GenerateResource.cache
