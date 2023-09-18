@@ -1,3 +1,7 @@
+## ignore visual studio temporary files
+
 .vs/
 x64/
 BoundedFractionCalculator/x64/
+post anneal.csv
+as bond.csv
