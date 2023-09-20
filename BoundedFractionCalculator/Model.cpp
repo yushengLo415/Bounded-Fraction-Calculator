@@ -1,15 +1,15 @@
 #include "pch.h"
-#include "FileInput.h"
+#include "Model.h"
 
-FileInput::FileInput() {
+Model::Model() {
     Initialize();
 }
 
-FileInput::~FileInput() {
+Model::~Model() {
 
 }
 
-void FileInput::Initialize() {
+void Model::Initialize() {
     _vecXCoordThatYBelowThreshold.clear();
     _vecUnbounded.clear();
     _threshold = 128;
@@ -18,7 +18,7 @@ void FileInput::Initialize() {
     _lengthOfY = 0;
 }
 
-bool FileInput::ReadFile(String^ filePath) {
+bool Model::ReadFile(String^ filePath) {
     Initialize();
     //將filePath(String^)轉換成char*
     const char* chars = (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(filePath)).ToPointer();
@@ -60,7 +60,7 @@ bool FileInput::ReadFile(String^ filePath) {
     return true;
 }
 
-void FileInput::SetThreshold(String^ threshold) {
+void Model::SetThreshold(String^ threshold) {
     Initialize();
     //將threshold(String^)轉換成char*
     const char* chars = (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(threshold)).ToPointer();
@@ -73,7 +73,7 @@ void FileInput::SetThreshold(String^ threshold) {
     ComputeBoundedFraction();
 }
 
-void FileInput::ComputeBoundedFraction() {
+void Model::ComputeBoundedFraction() {
     for (int i = 0; i < _vecValueInFile.size(); i++) {
 
         //記錄出現的最大X值即為該圖長度
@@ -104,24 +104,24 @@ void FileInput::ComputeBoundedFraction() {
     _lengthOfY += 1;
 }
 
-int FileInput::GetThreshold() {
+int Model::GetThreshold() {
     return _threshold;
 }
 
-vector<vector<int>> FileInput::GetUnboundedPoint() {
+vector<vector<int>> Model::GetUnboundedPoint() {
     return _vecUnbounded;
 }
 
-int FileInput::GetLengthOfX() {
+int Model::GetLengthOfX() {
     return _lengthOfX;
 }
 
-int FileInput::GetLengthOfY() {
+int Model::GetLengthOfY() {
     return _lengthOfY;
 }
 
 //在特定threshold下非孔洞的比例
-float FileInput::GetContactFraction() {
+float Model::GetContactFraction() {
     if (_countOfPore == 0)
         return 1;
     else
@@ -129,7 +129,7 @@ float FileInput::GetContactFraction() {
 }
 
 //在特定threshold下孔洞的比例
-float FileInput::GetUnboundedFraction() {
+float Model::GetUnboundedFraction() {
     if (_countOfPore == 0)
         return 0;
     else

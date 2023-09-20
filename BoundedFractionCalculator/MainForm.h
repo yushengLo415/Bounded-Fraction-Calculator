@@ -1,8 +1,9 @@
 #ifndef MAINFORM
 #define MAINFORM
 
-#include "FileInput.h"
+#include "Model.h"
 #include <map>
+
 
 namespace CppCLRWinformsProjekt {
 	using namespace System;
@@ -11,6 +12,8 @@ namespace CppCLRWinformsProjekt {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Threading;
+	using namespace System::Collections::Generic;
 
 	/// <summary>
 	/// Zusammenfassung für MainForm
@@ -39,7 +42,11 @@ namespace CppCLRWinformsProjekt {
 			TrackBar^ _threshold_trackBar;
 			Label^ _path_label;
 			Form^ screenshotRegion;
-			System::ComponentModel::Container^ components;
+			System::ComponentModel::Container^ components; 
+			//Graphics^ _g;
+
+			int _startIndex;
+			int _endIndex;
 
 			void InitializeComponent();
 			void Import_Click(System::Object^ sender, System::EventArgs^ e);
@@ -51,6 +58,8 @@ namespace CppCLRWinformsProjekt {
 			void ThresholdTrackBarScrolled(System::Object^ sender, System::EventArgs^ e);
 			void PanelPaint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e);
 			void ScreenShotClick(System::Object^ sender, System::EventArgs^ e);
+			void UpdateView();
+			//void Paint();
 };
 }
 

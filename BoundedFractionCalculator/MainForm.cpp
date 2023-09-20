@@ -3,7 +3,7 @@
 
 namespace CppCLRWinformsProjekt {
 
-	FileInput fileInput;
+	Model model;
 
 	enum ImageFormat {
 		JPEG,
@@ -32,13 +32,14 @@ namespace CppCLRWinformsProjekt {
 
 		if (file->ShowDialog() == System::Windows::Forms::DialogResult::OK && file->FileName->Length > 0) {
 			_filePathTextBox->Text = file->FileName;
-			if (!fileInput.ReadFile(_filePathTextBox->Text)) {
+			if (!model.ReadFile(_filePathTextBox->Text)) {
 				MessageBox::Show("無法開啟檔案，請再試一次");
 			}
 
 			_file_name_label->Text = file->SafeFileName;
 			_threshold_value_textBox->Text = "128";
 			SetThresholdTextBox("128");
+			UpdateView();
 		}
 	}
 
@@ -61,34 +62,69 @@ namespace CppCLRWinformsProjekt {
 	}
 
 	void MainForm::HandleThresholdChange() {
-		//防止沒有輸入的runtime error
-		if (_threshold_value_textBox->Text == "")
+		//防止invalid argument
+		try {
+			SetThresholdTextBox(_threshold_value_textBox->Text);
+			UpdateView();
+		}
+		catch (invalid_argument e) {
 			_threshold_value_textBox->Text = "0";
-		SetThresholdTextBox(_threshold_value_textBox->Text);
+			SetThresholdTextBox(_threshold_value_textBox->Text);
+		}
 	}
 
 	void MainForm::SetThresholdTextBox(String^ threshold) {
-		fileInput.SetThreshold(threshold);
-		_contact_fraction_value_label->Text = fileInput.GetContactFraction().ToString("f4");
-		_unbounded_fraction_value_label->Text = fileInput.GetUnboundedFraction().ToString("f4");
-		_threshold_value_textBox->Text = fileInput.GetThreshold().ToString();
-		_threshold_trackBar->Value = fileInput.GetThreshold();
-
-		//畫圖至panel上
-		_panel->Size = System::Drawing::Size(fileInput.GetLengthOfX(), fileInput.GetLengthOfY());
-		_panel->Refresh();
+		model.SetThreshold(threshold);
 	}
 
-	//當trackBar被移動，單純質改變並不會觸發
+	//當trackBar被移動，透過輸入textbox改變則不會觸發此事件
 	void MainForm::ThresholdTrackBarScrolled(System::Object^ sender, System::EventArgs^ e) {
 		SetThresholdTextBox(_threshold_trackBar->Value.ToString());
+		UpdateView();
 	}
 
 	void MainForm::PanelPaint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 		Graphics^ g = e->Graphics;
-		vector<vector<int>> vec = fileInput.GetUnboundedPoint();
+		vector<vector<int>> vec = model.GetUnboundedPoint();
 		for (int i = 0; i < vec.size(); i++)
 			g->FillRectangle(Brushes::Black, vec.at(i).at(0), vec.at(i).at(1), 1, 1);
+
+		/*_g = e->Graphics;
+		vector<vector<int>> vec = model.GetUnboundedPoint();
+
+		// 分割工作給多個執行緒
+		int numThreads = 1; // 使用處理器數量作為執行緒數量
+		List<Thread^>^ threads = gcnew List<Thread^>();
+
+		for (int i = 0; i < numThreads; i++) {
+			_startIndex = i * (vec.size() / numThreads);
+			_endIndex = (i == numThreads - 1) ? vec.size() : (i + 1) * (vec.size() / numThreads);
+			Thread^ threadi = gcnew Thread(gcnew ThreadStart(this, &MainForm::Paint));
+			threads->Add(threadi);
+		}
+
+		// 等待所有執行緒完成
+		for each (Thread^ thread in threads) {
+			thread->Start();
+		}
+	}
+
+	void MainForm::Paint() {
+		vector<vector<int>> vec = model.GetUnboundedPoint();
+		for (int j = _startIndex; j < _endIndex; j++) {
+			_g->FillRectangle(Brushes::Black, vec.at(j).at(0), vec.at(j).at(1), 1, 1);
+		}
+	}*/
+	}
+
+	void MainForm::UpdateView() {
+		_contact_fraction_value_label->Text = model.GetContactFraction().ToString("f4");
+		_unbounded_fraction_value_label->Text = model.GetUnboundedFraction().ToString("f4");
+		_threshold_value_textBox->Text = model.GetThreshold().ToString();
+		_threshold_trackBar->Value = model.GetThreshold();
+		//更新畫布
+		_panel->Size = System::Drawing::Size(model.GetLengthOfX(), model.GetLengthOfY());
+		_panel->Refresh();
 	}
 
 	void MainForm::ScreenShotClick(System::Object^ sender, System::EventArgs^ e) {
@@ -348,4 +384,3 @@ namespace CppCLRWinformsProjekt {
 #pragma endregion
 
 }
-

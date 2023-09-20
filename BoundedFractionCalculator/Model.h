@@ -1,21 +1,22 @@
-#ifndef FILEINPUT_H
-#define FILEINPUT_H
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cliext/vector>
 
 
 using namespace System;
 using namespace std;
 
-class FileInput
+class Model
 {
 	public:
-		FileInput();
-		~FileInput();
+		Model();
+		~Model();
 		bool ReadFile(String^ filePath);
 		float GetContactFraction();
 		float GetUnboundedFraction();

@@ -143,7 +143,7 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileInput.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -153,7 +153,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CppCLR_WinformsProjekt.cpp" />
-    <ClCompile Include="FileInput.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
